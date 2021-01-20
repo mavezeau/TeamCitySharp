@@ -32,7 +32,7 @@ namespace TeamCitySharp.ActionTypes
 
     public TestOccurrences ByProjectLocator(ProjectLocator locator)
     {
-      return m_caller.Get<TestOccurrences>($"/testOccurrences?locator=currentlyFailing:true,affectedProject:({locator})");
+      return m_caller.Get<TestOccurrences>($"/testOccurrences?locator=currentlyFailing:true,affectedProject:({locator})&fields=testOccurrence(id,name,status,href,details,duration)");
     }
 
     public TestOccurrences ByTestLocator(TestLocator locator)
