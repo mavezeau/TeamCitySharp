@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json;
 
 namespace TeamCitySharp.DomainEntities
@@ -27,6 +28,11 @@ namespace TeamCitySharp.DomainEntities
         {
             return "testOccurrence";
         }
+
+
+        [JsonIgnore]
+        public string BuildName => Name?.Split(':')?.ElementAtOrDefault(0)?.Replace(".dll", "")?.Replace(".", "");
+
         [JsonProperty("id")]
         public string Id { get; set; }
 
