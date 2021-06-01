@@ -5,7 +5,7 @@
 	<Product>MvsTelecom.Teamcity.Api</Product>
     <Company>MVS Telecom</Company>
     <Authors>MVS Telecom</Authors>
-    <Version>0.0.0.2</Version>
+    <Version>0.0.0.3</Version>
     <PackageProjectUrl>https://github.com/MVS-Telecom/mvstelecom-teamcity-api</PackageProjectUrl>
     <PackageIcon>icon.png</PackageIcon>
     <Description>C# API client for TeamCity</Description>
