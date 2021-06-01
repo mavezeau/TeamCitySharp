@@ -70,39 +70,21 @@ namespace TeamCitySharp.ActionTypes
         [Test]
         public void Test()
         {
-            var teamcity = new TeamCityClient("build.mvstelecom.ru");
-            teamcity.ConnectWithAccessToken("eyJ0eXAiOiAiVENWMiJ9.V0R5T1k5R0tPTklESUctNndDQjhkOVFkYzVn.OTczMGJhZGItMzVkYy00Y2QyLThmYWUtODg1NTk0N2RlYWFl");
+            var projectName = "ExtraCheckTest";
+            var api = new TeamCityClient("build.mvstelecom.ru");
+            api.ConnectWithAccessToken("eyJ0eXAiOiAiVENWMiJ9.V0R5T1k5R0tPTklESUctNndDQjhkOVFkYzVn.OTczMGJhZGItMzVkYy00Y2QyLThmYWUtODg1NTk0N2RlYWFl");
 
-            var p = teamcity.Projects.ById("ExtraCheckTest");
+            var project = api.Projects.ById(projectName);
+            var tests = api.Tests.ByProjectLocator(ProjectLocator.WithId(projectName));
 
-            //p.BuildTypes.BuildType.Where(x=>x.)
+            var disabled = project.BuildTypes.BuildType
+                .Where(x => x.Name.StartsWith("[disabled]"))
+                .Select(x => x.Id)
+                .ToList();
 
-            var aa = teamcity.Tests.ByProjectLocator(ProjectLocator.WithId("ExtraCheckTest"));
-            var cc = aa.TestOccurrence.Select(x => x.BuildName).ToList();
-            
-            var bb = aa.TestOccurrence.Select(x => x.Build.BuildTypeId).ToList();
-
-            var buildName = "ExtraCheckTest_Iridium360ExtraCheckTest";
-
-            ///Название билда
-            var name = buildName.Split('_').ElementAtOrDefault(1);
-
-            var builds = teamcity.Projects.ById("ExtraCheckTest").BuildTypes.BuildType;
-            var tests = teamcity.Tests.ByProjectLocator(ProjectLocator.WithId("ExtraCheckTest"));
-
-            var targetTests = tests.TestOccurrence.Where(x => x.BuildName == name).ToList();
-
-            var targetBuild = teamcity.Builds.ByBuildLocator(BuildLocator.WithNumber(targetTests[0].Build.Number));
-            var prevBuild = teamcity.Builds.ByBuildLocator(BuildLocator.WithNumber(targetTests[0].Build.Number));
-
-            var groups = new Dictionary<string, List<TestOccurrence>>();
-
-            foreach (var build in builds)
-            {
-                groups.Add(build.BuildName, tests.TestOccurrence.Where(x => x.BuildName == build.BuildName).ToList());
-                //var aaa = teamcity.Builds.ByBuildLocator(BuildLocator.WithDimensions(BuildTypeLocator.WithId(build.Id), maxResults: 5));
-            }
-
+            var actualTests = tests.TestOccurrence
+                .Where(x => !disabled.Contains(x.Build.BuildTypeId))
+                .ToList();
         }
     }
 }
