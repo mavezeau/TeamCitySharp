@@ -1,4 +1,5 @@
 ﻿using Newtonsoft.Json;
+using System.Linq;
 
 namespace TeamCitySharp.DomainEntities
 {
@@ -8,6 +9,9 @@ namespace TeamCitySharp.DomainEntities
     {
       return Name;
     }
+
+    [JsonIgnore]
+    public string BuildName => Id?.Split('_')?.ElementAtOrDefault(1);
 
     [JsonProperty("id")]
     public string Id { get; set; }
